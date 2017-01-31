@@ -3,17 +3,29 @@
 
 var init = function(){
 
-    d3.select(".header").text("Headline goes here.");
-    d3.select(".explainer").text("Explainer copy goes here.");
-    d3.select(".sourceline").text("Source: SOURCE NEEDED");
-    d3.select(".byline").text("Jake Kara / CT Mirror");
     
     var container = d3.select("#container");
     container.html("");
     var max_rows = 20;
     var row_min = 1;
     var col_min = 0.85;
+    var row_pass_pct = 0.8;
+
+    d3.select(".header").text("Redefining success means different outcomes based on the same data");
+    d3.select(".explainer").text("(Data based on "
+				 + max_rows
+				 + " randomly selected records.)");
+    d3.select(".sourceline").text("Source: SOURCE NEEDED");
+    d3.select(".byline").text("Jake Kara / CT Mirror");
+
     
+    var update_row_summary = function(txt){
+	d3.select(".summary_1").html("<strong>Old way: </strong>" + txt);
+    }
+    var update_col_summary = function(txt){
+	d3.select(".summary_2").html("<strong>New way: </strong>" + txt);
+    }
+
     var row_passes = function(row){
 	var min = 0.1;
 	var total_fields = Object.keys(row).length;
@@ -27,6 +39,10 @@ var init = function(){
     }
     
     var tally_rows = function(){
+
+	var rows_passed = 0;
+	var rows_failed = 0;
+	
 	for (var i = 0; i < data.length; i++){
 	    var rects = d3.selectAll("rect.val-box[data-row='"+i+"']");
 	    var pass = tally_nodes(rects, row_min);
@@ -36,10 +52,35 @@ var init = function(){
 	    d3.select(sel)
 		.attr("data-passed",pass)
 
+	    if (pass){
+		rows_passed++;
+	    }
+	    else {
+		rows_failed++;
+	    }
 	}
+
+	var score = rows_passed / (rows_passed + rows_failed);
+	var passed = score >= row_pass_pct 
+	var pct = Math.round(score * 100);
+	var did_did_not = "succeeded in meeting";
+	if (!passed){
+	    did_did_not = "failed to meet";
+	}
+	
+	update_row_summary
+	("Out of " + (rows_passed + rows_failed) + " cases,"
+	 + " " + rows_passed + ", or " + pct + " % of children had 100%"
+	 + " of their needs met."
+	 + " DCF " + did_did_not + " its goal based on the current metric.");
     }
 
     var tally_cols = function(){
+
+	var cols_passed = 0,
+	    cols_failed = 0;
+	var fails = [];
+	
 	for (var i in headers){
 	    var rects = d3.selectAll("rect.val-box[data-col='"+i+"']");
 	    var pass = tally_nodes(rects, col_min);
@@ -47,6 +88,23 @@ var init = function(){
 	    // console.log("col" + i + ": ", pass);
 	    d3.select("rect.pass-fail[data-col='"+i+"']")
 		.attr("data-passed",pass);
+
+	    if (pass){
+		cols_passed++;
+	    }
+	    else {
+		cols_failed++;
+		fails += headers[i];
+	    }
+	}
+
+	if (cols_failed > 0){
+	    update_col_summary("In " + cols_failed + " of the"
+			       + (cols_passed + cols_failed) +  " categories,"
+			       
+			   + " less than 85% of children's needs were being met."
+			       + " The problem categories include: "
+			       + (headers.join(", ")) + ".");
 	}
     }
 

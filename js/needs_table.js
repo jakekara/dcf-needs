@@ -24,8 +24,7 @@ var init = function(){
 	    var pass = tally_nodes(rects, row_min);
 
 	    // console.log("row" + i + ": ", pass);
-	    var sel = "rect.pass-fail[data-row='"+i+"'";
-	    console.log(sel);
+	    var sel = "rect.pass-fail[data-row='"+i+"']";
 	    d3.select(sel)
 		.attr("data-passed",pass)
 

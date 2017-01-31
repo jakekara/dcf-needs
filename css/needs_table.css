@@ -37,7 +37,6 @@ rect.val-box{
     stroke: white;
 }
 
-
 rect.val-box:hover{
     cursor:pointer;
     opacity: 0.5;

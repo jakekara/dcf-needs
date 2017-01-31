@@ -3,20 +3,26 @@
 
 var window_width = 0;
 
-var init = function(){
-    window_width == window.innerWidth;
-    
+
+var init = function(names){
+    window_width = window.innerWidth;
+
+    var full_width = 650;
     var container = d3.select("#container");
     container.html("");
-    var max_rows = 20;
+    var max_rows = 15;
     var row_min = 1;
     var col_min = 0.85;
     var row_pass_pct = 0.8;
 
-    d3.select(".header").text("Redefining success means different outcomes based on the same data");
-    d3.select(".explainer").text("(Each row represents one child based on "
-				 + max_rows
-				 + " randomly selected records.)");
+    d3.select(".header")
+	.text("Redefining success");
+    d3.select(".top_copy")
+	.text("In this table, each row represents one child, and the  green and red column on the right indicates whether that child's needs were fully met or not. The current DCF standard says that 80 percent of those boxes should be green, meaning 80 percent of children have all of their needs met in every category. The new standard is based on each category, and says 85 percent of children must have their needs in each category. The red and green row at the bottom of the table indicates whether 85 percent of children had their needs met in each category. This table only shows a hypothetical scenario based on a portion of real cases, a random selection of " + max_rows + " records."); 
+
+    // d3.select(".explainer").text("(Each row represents one child based on "
+    // 				 + max_rows
+    // 				 + " randomly selected records.)");
     d3.select(".sourceline").text("Source: SOURCE NEEDED");
     d3.select(".byline").text("Jake Kara / CT Mirror");
 
@@ -82,11 +88,15 @@ var init = function(){
 	    did_did_not = "failed to meet";
 	}
 	
-	update_row_summary
-	("Out of " + (rows_passed + rows_failed) + " cases,"
-	 + " " + rows_passed + ", or " + pct + " % of children had 100%"
-	 + " of their needs met."
-	 + " DCF " + did_did_not + " its goal based on the current metric.");
+	// update_row_summary(
+	//     rows_passed + ", or " + pct + "% of children in this scenario have"
+	// 	+ " all of their needs met. Based on the random data below,"
+	// 	+ " DCF would have "
+	// 	+ did_did_not + " its goal based on the current metric.");
+
+	update_row_summary(
+	    "DCF would have " + did_did_not + " its goals based on random data below.");
+	
     }
 
     var tally_cols = function(){
@@ -112,17 +122,23 @@ var init = function(){
 	}
 
 	if (cols_failed > 0){
-	    update_col_summary("In " + cols_failed + " of the "
-			       + (cols_passed + cols_failed) +  " categories,"
-			       
-			   + " less than 85% of children's needs were being met."
-			       + " The problem categories include: "
-			       + (headers.join(", ")) + ".");
+	    // update_col_summary("In " + cols_failed + " of the "
+	    // 		       + (cols_passed + cols_failed) +  " categories,"
+	    // 		       + " less than 85% of children's needs were being met"
+	    // 		       + ", based on the random data below." 
+	    // 		       + " The unsatisfied categories include: "
+	    // 		       + (headers.join(", ")) + ".");
+
+	    update_col_summary("Based on random data below, goals not met in the following categories: " + headers.join(", ") + ".");
 	}
-    }
+	else {
+	    update_col_summary("Success in all categories, based on random data below.");
+	}
+}
 
 
     var overall_width = function(){
+	// return Math.min(full_width, window.innerWidth);
 	return window.innerWidth;
     };
     
@@ -138,6 +154,8 @@ var init = function(){
 	.classed("header", true)
     var rows_g = table.append("g")
 	.classed("row_container", true)
+    var row_labels_g = table.append("g")
+	.classed("row_labels", true)
 
     var header_selection = null;
     var header_height = 0;
@@ -145,8 +163,12 @@ var init = function(){
     var data = [];    
 
     var cell_width = function(){
-	return  overall_width() / (headers.length + 1);
+	return  (overall_width()
+		 - row_labels_g.node().getBBox().width)
+	    / (headers.length + 1);
     }
+
+
 
     var row_height = function(){
 	// return (window.innerHeight - header_height) / data.length;
@@ -154,11 +176,12 @@ var init = function(){
     }
     
     var add_header = function(header_list){
+
 	headers = header_list;
 	
 	headers.forEach(function(title, i){
 	    
-	    var x = (0.5 + i) * cell_width();
+	    var x = (0.5 + i) * cell_width() + row_labels_g.node().getBBox().width;
 	    
 	    var header_item = header.append("text")
 		.classed("header-item", true)
@@ -215,7 +238,7 @@ var init = function(){
 		.attr("data-col", i)
 		.classed("pass-fail", true)
 		.attr("y",y)
-		.attr("x", i * cell_width())
+		.attr("x", row_labels_g.node().getBBox().width + i * cell_width())
 		.attr("height", row_height())
 		.attr("width", cell_width());
 	}
@@ -224,6 +247,45 @@ var init = function(){
 	var header_bbox = d3.select("g.header").node().getBoundingClientRect();
 	var y_offset = header_bbox.height; // + header_bbox.top;
 	rows_g.attr("transform","translate(0," + y_offset + ")");
+	row_labels_g.attr("transform","translate(0," + y_offset + ")");
+    }
+
+    var add_row_labels = function(){
+
+	if (window_width <= full_width) return;
+	var last_y = 0;
+
+	for (var i in data){
+	    var y = (Number(i) + 1) * row_height();
+	    var label = row_labels_g.append("text")
+		.text("Child " + (Number(i) + 1))
+		.attr("data-row-label",i)
+		.classed("hidden", true)
+		// .text(names[Math.floor(Math.random() * names.length)])
+		.attr("x",0)
+
+	    var height = label.node().getBBox().height;
+	    label.attr("y",y + height);
+	    last_y = y + height + row_height();
+	}
+
+	row_labels_g.append("text")
+	    .text("New metric_ ")
+	    .style("opacity", 0)
+	    .attr("y", last_y);
+
+	// var header_bbox = header_selection.node().getBBox();
+	// var row_labels_bbox = row_labels_g.node().getBBox();
+	// console.log("header_bbox", header_bbox);
+	// console.log("row_labels_bbox", row_labels_bbox);
+	// var x = header_bbox.x;
+	// var left_offset = row_labels_bbox.width;
+	// var new_x = x + left_offset;
+	// console.log(x, new_x);
+	// header_selection.attr("x",x + row_labels_bbox.width);
+
+	
+
     }
 
     var add_row = function(obj, i){
@@ -239,6 +301,8 @@ var init = function(){
 
 	    if (obj.hasOwnProperty(field)){
 		var status = met(obj[field]);
+		var x = row_labels_g.node().getBBox().width
+		    + width * j;
 		row.append("rect")
 		    .classed("val-box", true)
 		    .attr("data-row",i)
@@ -247,7 +311,7 @@ var init = function(){
 		    .classed("met",status)
 		    .classed("unmet",!status)
 		    .attr("y", y)
-		    .attr("x", width * j)
+		    .attr("x", x)
 		    .attr("width", width)
 		    .attr("height", row_height())
 		    .on("click",function(){
@@ -256,8 +320,18 @@ var init = function(){
 			d3.select(this).classed("unmet", met);
 			tally_rows();
 			tally_cols();
-		    });
-		last_x = width * j + width;
+		    })
+		    .on("mouseover", function(){
+			d3.select("[data-row-label='"+i+"']")
+			    .classed("hidden",false)
+		    })
+		    .on("mouseout", function(){
+			d3.select("[data-row-label='"+i+"']")
+			    .classed("hidden",true)
+		    })
+
+		;
+		last_x = x + width;
 	    }
 	    else {
 		throw "ERROR: obj missing field: '" + field + "'";
@@ -300,8 +374,6 @@ var init = function(){
 
 
     var resize = function(){
-
-	
 	var svg_height = table.node().getBoundingClientRect().height;
 	var g_bbox = d3.select("g.toplevel").node().getBBox();
 	var g_height = g_bbox.height + g_bbox.y
@@ -321,6 +393,9 @@ var init = function(){
 	const headers = Object.keys(data[0]).filter(function(k){
 	    return (ignores.indexOf(k) < 0);
 	});
+	
+	add_row_labels();
+
 	add_header(headers);
 	data.forEach(add_row);
 	add_footer();
@@ -335,9 +410,13 @@ var init = function(){
     });
 }
 
-init();
 
-d3.select(window).on("resize", function(){
-    if (window_width == window.innerWidth) return;
-    init();
-});
+d3.json("https://cdn.rawgit.com/dominictarr/random-name/468ae50d/names.json",
+	function(names){
+	    init(names);
+
+	    d3.select(window).on("resize", function(){
+		if (window_width == window.innerWidth) return;
+		init(names);
+	    });
+	});

@@ -11,6 +11,8 @@ body {
 h1.header{
     font-weight:300;
     font-size:45px;
+    padding: 0px;
+    margin: 0px;
 }
 
 text.header-item{
@@ -78,4 +80,8 @@ rect.pass-fail[data-passed='true']{
 
 div.copy{
     margin-top: 1em;
+}
+
+.hidden{
+    opacity: 0.2;
 }

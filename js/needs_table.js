@@ -210,7 +210,7 @@ var init = function(){
     }
 
 
-    resize = function(){
+    var resize = function(){
 	var svg_height = table.node().getBoundingClientRect().height;
 	var g_bbox = d3.select("g.toplevel").node().getBBox();
 	var g_height = g_bbox.height + g_bbox.y
@@ -233,9 +233,9 @@ var init = function(){
 	add_header(headers);
 	data.forEach(add_row);
 	add_footer();
+	resize();
 	tally_rows();
 	tally_cols();
-	resize();
     };
     
     d3.csv("data/needs.csv", function(data){

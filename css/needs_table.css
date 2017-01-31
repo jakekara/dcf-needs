@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+body {
+    font-family: 'Lato', sans-serif;
+    margin: 0px;
+}
+
+text{
+    fill: gray;
+}
+
+table.needs-table{
+    width: 100%;
+}
+
+table.needs-table td{
+    height: 1em;
+}
+
+.rotate{
+}
+
+rect{
+    fill: #ddd;
+}
+
+rect.val-box.met{
+    fill: lightskyblue;
+}
+
+rect.unmet{
+    fill: gold;
+    stroke: white;
+}
+
+rect.val-box{
+    stroke: white;
+}
+
+
+rect.val-box:hover{
+    cursor:pointer;
+    opacity: 0.5;
+}
+
+rect.pass-fail{
+    stroke:white;
+}
+
+rect.pass-fail[data-passed='false']{
+    fill: tomato;
+}
+
+rect.pass-fail[data-passed='true']{
+    fill: lightgreen;
+}

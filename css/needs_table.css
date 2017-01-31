@@ -53,7 +53,7 @@ rect.val-box.met{
 }
 
 rect.val-box.unmet{
-    fill: lightgray;
+    fill: gold;
 }
 
 rect.val-box{

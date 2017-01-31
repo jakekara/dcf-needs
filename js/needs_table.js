@@ -20,6 +20,19 @@ var init = function(){
     d3.select(".sourceline").text("Source: SOURCE NEEDED");
     d3.select(".byline").text("Jake Kara / CT Mirror");
 
+
+    var add_legend = function(){
+	var legend = new CHLIB.legend()
+	    .selection(d3.select("#legend"))
+	    .colors(["tomato","palegreen","lightskyblue","gold"])
+	    .add_item("Goal failure")
+	    .add_item("Goal success")
+	    .add_item("Need met")
+	    .add_item("Need unmet")
+	    .draw()
+    };
+    add_legend();
+    
     
     var update_row_summary = function(txt){
 	d3.select(".summary_1").html("<strong>Old way: </strong>" + txt);

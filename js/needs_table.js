@@ -45,12 +45,12 @@ var init = function(names){
 	// Override dynamic change
 	
 	d3.select(".summary_1").html(
-	    "<strong>Old grading system</strong>The DCF court monitor checks in on a random sample of cases each quarter to see if they received the services they need. The state must meet every need of 80% of the cases reviewed to pass the test.");
+	    "<strong>Old grading system:</strong> The DCF court monitor checks in on a random sample of cases each quarter to see if they received the services they need. The state must meet every need of 80% of the cases reviewed to pass the test.");
 	
     }
     var update_col_summary = function(txt){
 	// d3.select(".summary_2").html("<strong>New way: </strong>" + txt);
-	d3.select(".summary_2").html("<strong>New grading system<strong>: The agency will be graded on how often the agency provides sufficient access to 11 areas of care. The state must provide 85 percent of the cases reviewed sufficient medical, dental, mental health, education, etc.");
+	d3.select(".summary_2").html("<strong>New grading system:</strong> The agency will be graded on how often the agency provides sufficient access to 11 areas of care. The state must provide 85 percent of the cases reviewed sufficient medical, dental, mental health, education, etc.");
     }
 
     var row_passes = function(row){

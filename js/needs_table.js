@@ -1,8 +1,10 @@
 // viz illustrating two ways of score DCF's ability to meet children's
 // needs
 
-var init = function(){
+var window_width = 0;
 
+var init = function(){
+    window_width == window.innerWidth;
     
     var container = d3.select("#container");
     container.html("");
@@ -47,7 +49,6 @@ var init = function(){
 	    var rects = d3.selectAll("rect.val-box[data-row='"+i+"']");
 	    var pass = tally_nodes(rects, row_min);
 
-	    // console.log("row" + i + ": ", pass);
 	    var sel = "rect.pass-fail[data-row='"+i+"']";
 	    d3.select(sel)
 		.attr("data-passed",pass)
@@ -85,7 +86,6 @@ var init = function(){
 	    var rects = d3.selectAll("rect.val-box[data-col='"+i+"']");
 	    var pass = tally_nodes(rects, col_min);
 
-	    // console.log("col" + i + ": ", pass);
 	    d3.select("rect.pass-fail[data-col='"+i+"']")
 		.attr("data-passed",pass);
 
@@ -209,7 +209,6 @@ var init = function(){
 
 	// Adjust y offset
 	var header_bbox = d3.select("g.header").node().getBoundingClientRect();
-	console.log(header_bbox);
 	var y_offset = header_bbox.height; // + header_bbox.top;
 	rows_g.attr("transform","translate(0," + y_offset + ")");
     }
@@ -288,6 +287,8 @@ var init = function(){
 
 
     var resize = function(){
+
+	
 	var svg_height = table.node().getBoundingClientRect().height;
 	var g_bbox = d3.select("g.toplevel").node().getBBox();
 	var g_height = g_bbox.height + g_bbox.y
@@ -323,4 +324,7 @@ var init = function(){
 
 init();
 
-d3.select(window).on("resize", init);
+d3.select(window).on("resize", function(){
+    if (window_width == window.innerWidth) return;
+    init();
+});

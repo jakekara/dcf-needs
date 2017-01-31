@@ -99,7 +99,7 @@ var init = function(){
 	}
 
 	if (cols_failed > 0){
-	    update_col_summary("In " + cols_failed + " of the"
+	    update_col_summary("In " + cols_failed + " of the "
 			       + (cols_passed + cols_failed) +  " categories,"
 			       
 			   + " less than 85% of children's needs were being met."

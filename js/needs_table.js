@@ -12,7 +12,7 @@ var init = function(){
     var row_pass_pct = 0.8;
 
     d3.select(".header").text("Redefining success means different outcomes based on the same data");
-    d3.select(".explainer").text("(Data based on "
+    d3.select(".explainer").text("(Each row represents one child based on "
 				 + max_rows
 				 + " randomly selected records.)");
     d3.select(".sourceline").text("Source: SOURCE NEEDED");

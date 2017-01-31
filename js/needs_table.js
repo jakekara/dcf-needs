@@ -1,5 +1,13 @@
+// viz illustrating two ways of score DCF's ability to meet children's
+// needs
+
 var init = function(){
 
+    d3.select(".header").text("Headline goes here.");
+    d3.select(".explainer").text("Explainer copy goes here.");
+    d3.select(".sourceline").text("Source: SOURCE NEEDED");
+    d3.select(".byline").text("Jake Kara / CT Mirror");
+    
     var container = d3.select("#container");
     container.html("");
     var max_rows = 20;
@@ -54,6 +62,11 @@ var init = function(){
     table_svg.html("");
     var table = table_svg
 	.append("g").classed("toplevel", true);
+    
+    var header = table.append("g")
+	.classed("header", true)
+    var rows_g = table.append("g")
+	.classed("row_container", true)
 
     var header_selection = null;
     var header_height = 0;
@@ -72,13 +85,12 @@ var init = function(){
     var add_header = function(header_list){
 	headers = header_list;
 	
-	var header = table.append("g")
-	    .classed("header", true)
 	headers.forEach(function(title, i){
 	    
-	    var x = (1 + i) * cell_width();
+	    var x = (0.5 + i) * cell_width();
 	    
 	    var header_item = header.append("text")
+		.classed("header-item", true)
 		.attr("x", x)
 		.attr("data-field",title)
 		.text(" " + title);
@@ -89,7 +101,7 @@ var init = function(){
 	    header_item.attr("y",y);
 
 	    header_item.attr("transform",
-			     "rotate(-90," + (x) + "," + y + ")");
+			     "rotate(-45," + (x) + "," + y + ")");
 	    // + " translate(0," + bbox().width + ")")
 	    // "translate(" + x + "," + bbox().width + ")"
 	    // + " rotate(-90)" )
@@ -122,7 +134,7 @@ var init = function(){
 
     var add_footer = function(){
 
-	var footer = table.append("g")
+	var footer = rows_g.append("g")
 	
 	var y = footer_y;
 	
@@ -136,15 +148,21 @@ var init = function(){
 		.attr("height", row_height())
 		.attr("width", cell_width());
 	}
+
+	// Adjust y offset
+	var header_bbox = d3.select("g.header").node().getBoundingClientRect();
+	console.log(header_bbox);
+	var y_offset = header_bbox.height; // + header_bbox.top;
+	rows_g.attr("transform","translate(0," + y_offset + ")");
     }
-    
+
     var add_row = function(obj, i){
 	
-	var row = table.append("g")
+	var row = rows_g.append("g")
 	    .attr("data-row", i)
 	    .classed("row", true);
 	var header_bbox = header_selection.node().getBoundingClientRect();
-	var y =  header_bbox.height + header_bbox.top + (i) * row_height();
+	var y =  (i + 1) * row_height();
 	var last_x = 0;
 	var width = cell_width();
 	headers.forEach(function(field, j){
@@ -234,6 +252,7 @@ var init = function(){
 	add_header(headers);
 	data.forEach(add_row);
 	add_footer();
+	
 	resize();
 	tally_rows();
 	tally_cols();

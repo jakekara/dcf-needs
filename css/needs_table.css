@@ -1,12 +1,19 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Lato:400,300');
 
 body {
     font-family: 'Lato', sans-serif;
     margin: 0px;
 }
 
-text{
+
+
+h1.header{
+    font-weight:300;
+}
+
+text.header-item{
     fill: gray;
+    font-size: 0.75em;
 }
 
 table.needs-table{

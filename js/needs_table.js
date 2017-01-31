@@ -37,7 +37,7 @@ var init = function(){
 	    var pass = tally_nodes(rects, col_min);
 
 	    // console.log("col" + i + ": ", pass);
-	    d3.select("rect.pass-fail[data-col='"+i+"'")
+	    d3.select("rect.pass-fail[data-col='"+i+"']")
 		.attr("data-passed",pass);
 	}
     }

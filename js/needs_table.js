@@ -30,7 +30,7 @@ var init = function(names){
     var add_legend = function(){
 	var legend = new CHLIB.legend()
 	    .selection(d3.select("#legend"))
-	    .colors(["tomato","palegreen","lightskyblue","gold"])
+	    .colors(["tomato","palegreen","lightskyblue","lightgray"])
 	    .add_item("Goal failure")
 	    .add_item("Goal success")
 	    .add_item("Need met")

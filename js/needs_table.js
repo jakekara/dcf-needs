@@ -17,8 +17,8 @@ var init = function(names){
 
     d3.select(".header")
 	.text("Redefining success");
-    d3.select(".top_copy")
-	.text("In this table, each row represents one child, and the  green and red column on the right indicates whether that child's needs were fully met or not. The current DCF standard says that 80 percent of those boxes should be green, meaning 80 percent of children have all of their needs met in every category. The new standard is based on each category, and says 85 percent of children must have their needs in each category. The red and green row at the bottom of the table indicates whether 85 percent of children had their needs met in each category. This table only shows a hypothetical scenario based on a portion of real cases, a random selection of " + max_rows + " records."); 
+    // d3.select(".top_copy")
+    // 	.text("In this table, each row represents one child, and the  green and red column on the right indicates whether that child's needs were fully met or not. The current DCF standard says that 80 percent of those boxes should be green, meaning 80 percent of children have all of their needs met in every category. The new standard is based on each category, and says 85 percent of children must have their needs in each category. The red and green row at the bottom of the table indicates whether 85 percent of children had their needs met in each category. This table only shows a hypothetical scenario based on a portion of real cases, a random selection of " + max_rows + " records."); 
 
     // d3.select(".explainer").text("(Each row represents one child based on "
     // 				 + max_rows
